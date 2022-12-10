@@ -46,8 +46,6 @@ void WiFiStart() {
 
   server.on("/get_update", HTTP_GET, [](AsyncWebServerRequest *request){
     String response_str;
-    doc["temperature"] = ESPtemp;
-    doc["humidity"] = ESPhumid;
     serializeJson(doc, response_str);
     request->send(200, "text/html", response_str);
   });
@@ -72,10 +70,10 @@ void loop() {
   delay(500);
 
   dht.temperature().getEvent(&event);
-  ESPtemp = event.temperature;
+  doc["temperature"] = event.temperature;
 
   dht.humidity().getEvent(&event);
-  ESPhumid = event.relative_humidity;
+  doc["humidity"] = event.relative_humidity;
 
   Serial.print(F("Temperature: "));
   Serial.print(ESPtemp);
